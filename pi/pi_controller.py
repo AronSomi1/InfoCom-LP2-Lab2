@@ -2,14 +2,29 @@ import requests
 import time
 import random
 import click
+from sense_hat import SenseHat
 
 
-# Replace with your own function in Part 1
+s = SenseHat()
+
+
+# Replace with your own function in Part 1 DONE
 def get_direction():
     d_long = 0
     d_la = 0
     send_vel = False
     c = click.getchar()
+    
+    for event in s.stick.get_events():
+        if event.direction == 'up':
+            c = 'w'
+        if event.direction == 'down':
+            c = 's'
+        if event.direction == 'right':
+            c = 'd'
+        if event.direction == 'left':
+            c = 'a'
+            
     if c =='a':
         click.echo('Left')
         send_vel = True
@@ -33,10 +48,9 @@ def get_direction():
     else:
         d_long = 0
         d_la = 0
-        click.echo('Invalid input :(')
+        #click.echo('Invalid input :(')
         send_vel = False
     return d_long, d_la, send_vel
-
 
 if __name__ == "__main__":
     SERVER_URL = "http://127.0.0.1:5001/drone"
